@@ -15,9 +15,9 @@ const limiter = rateLimit({
 });
 app.set("trust proxy", 1);
 app.use(limiter);
-app.use("/user", proxy("http://localhost:7002"));
 app.use(express.json({limit: '100mb'}));
 app.use(express.urlencoded({ extended: true, limit: '100mb'}));
+app.use("/api/v1/user", proxy("http://localhost:7002"));
 
 app.get("/", (req, res) => {
   res.send("Hello World");

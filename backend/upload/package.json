@@ -15,10 +15,12 @@
   "packageManager": "pnpm@10.27.0",
   "dependencies": {
     "dotenv": "^17.2.3",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "multer": "^2.0.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/multer": "^2.0.0",
     "concurrently": "^9.2.1",
     "nodemon": "^3.1.11",
     "typescript": "^5.9.3"

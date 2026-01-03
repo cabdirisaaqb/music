@@ -8,6 +8,7 @@ import playlist from "./model/playlist.js";
 import genre from "./model/genre.js";
 import cors from "cors";
 import cooke_parser from "cookie-parser";
+import UserRouter from "./router.js";
 
 
 const app: Express = express();
@@ -40,9 +41,7 @@ db.connect().then(async() => {
 });
 
 
-app.get("/", (_, res) => {
-  res.send("Hello World");
-});
+app.use("/",UserRouter)
 
 
 app.listen(Env.PORT, () => {
