@@ -6,10 +6,21 @@ import songs from "./model/songs.js";
 import album from "./model/album.js";
 import playlist from "./model/playlist.js";
 import genre from "./model/genre.js";
+import cors from "cors";
+import cooke_parser from "cookie-parser";
+
 
 const app: Express = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({limit: '100mb'}));
+app.use(express.urlencoded({ extended: true, limit: '100mb'}));
+app.use(cors({
+  origin: "*",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+app.use(cooke_parser());
+
 
 db.connect().then(async() => {
  try {
@@ -18,6 +29,7 @@ db.connect().then(async() => {
   await songs()
   await album()
   await genre()
+  await playlist()
   
  } catch (error) {
   console.log("x",error);

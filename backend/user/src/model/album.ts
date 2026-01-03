@@ -5,15 +5,15 @@ const album = async () => {
     const query = `
         CREATE TABLE IF NOT EXISTS album(
             id_album SERIAL PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            artist VARCHAR(255) NOT NULL,
-            genre VARCHAR(255) NOT NULL,
-            search TEXT[] NOT NULL,
-            image_url TEXT NOT NULL,
+            name_album VARCHAR(255) NOT NULL,
+            artist_album VARCHAR(255) NOT NULL,
+            genre_album VARCHAR(255) NOT NULL,
+            search_album TEXT[] NOT NULL,
+            image_url_album TEXT NOT NULL,
             created_at_album TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at_album TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
-        CREATE INDEX IF NOT EXISTS idx_album_name ON album(name);`;
+        CREATE INDEX IF NOT EXISTS idx_album_name ON album(name_album);`;
     await db.query(query);
     console.log("✅ album created successfully");
   } catch (error: any) {
