@@ -4,6 +4,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Env from "./config/env.js";
 import { UserSchema } from "./config/zod.js";
+import axios from "axios";
+import formdata from "form-data";
+
 
 export const CreateUser = async (req: Request, res: Response) => {
   try {
@@ -32,7 +35,7 @@ export const CreateUser = async (req: Request, res: Response) => {
     
     res
       .status(200)
-      .json({ massage: "user created", data: (await newUser).rows[0] });
+      .json({ massage: "user created" });
   } catch (error: any) {
     res.status(500).json({ massage: error.message });
     console.log(`error : ${error}`);
@@ -68,7 +71,7 @@ export const LoginUser = async (req: Request, res: Response) => {
       sameSite: "none",
       secure: true,
     });
-    res.status(200).json({ massage: "user logged in", token });
+    res.status(200).json({ massage: `welcome back  ${user.rows[0].name} `, token });
   } catch (error: any) {
     res.status(500).json({ massage: error.message });
     console.log(`error : ${error}`);
@@ -81,15 +84,49 @@ export const updateUser = async (req: Request, res: Response) => {
     if (!id) {
       res.status(400).json({ massage: "please id is required" });
     }
-    const user = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+    const user = await db.query("SELECT * FROM users WHERE id_user = $1", [id]);
+    if (user.rows.length === 0) {
+      res.status(400).json({ massage: "user not found" });
+    }
     const { name, email } = req.body;
-    const avatar = req.file as Express.Multer.File | undefined;
+    const file = req.file as Express.Multer.File | undefined;
+   let avatar :string | undefined;
+   
+
+     if(file){
+
+       const formData = new formdata();
+       
+      
+       formData.append("img", file.buffer, {
+           filename: file.originalname,
+           contentType: file.mimetype,
+       });
+       const {data} = await axios.post(`${Env.SERVER_UPLOAD_PATH}/upload/avatar`, formData, {
+           headers: {
+               ...formData.getHeaders(),
+               "Accept": "application/json",
+           }
+       });
+       avatar = data.avatar;
+       
+
+     }
+
+    
+
 
     const update = {
       name: name || user.rows[0].name,
       email: email || user.rows[0].email,
-      avatar: avatar ? (avatar.filename || (avatar as any).path) : user.rows[0].avatar
+      avatar: avatar || user.rows[0].avatar 
     };
+     const result = await db.query(
+      "UPDATE users SET name = $1, email = $2, avatar = $3 WHERE id_user = $4 RETURNING *",
+      [update.name, update.email, update.avatar, id]
+    );
+
+    res.status(200).json({ massage: "user updated" });
 
 
     
