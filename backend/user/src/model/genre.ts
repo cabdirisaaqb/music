@@ -5,7 +5,7 @@ const genre = async () => {
     const query = `
     CREATE TABLE IF NOT EXISTS genre(
     id_genre SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL
+    name_genre VARCHAR(255) UNIQUE NOT NULL
     );
         `;
     await db.query(query);

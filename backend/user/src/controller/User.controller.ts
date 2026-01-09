@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import db from "./config/db.js";
+import db from "../config/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import Env from "./config/env.js";
-import { UserSchema } from "./config/zod.js";
+import Env from "../config/env.js";
+import { UserSchema } from "../config/zod.js";
 import axios from "axios";
 import formdata from "form-data";
 
@@ -62,7 +62,7 @@ export const LoginUser = async (req: Request, res: Response) => {
         res.status(400).json({ massage: "invalid password" });
 
     }
-    const token = jwt.sign({ id: user.rows[0].id,role:user.rows[0].role }, Env.JWT_SECRET!, {
+    const token = jwt.sign({ id: user.rows[0].id_user,role:user.rows[0].role }, Env.JWT_SECRET!, {
       expiresIn: "30d",
     });
     res.cookie("token", token, {
@@ -72,6 +72,15 @@ export const LoginUser = async (req: Request, res: Response) => {
       secure: true,
     });
     res.status(200).json({ massage: `welcome back  ${user.rows[0].name} `, token });
+  } catch (error: any) {
+    res.status(500).json({ massage: error.message });
+    console.log(`error : ${error}`);
+  }
+};
+export const LogoutUser = async (__: Request, res: Response) => {
+  try {
+    res.clearCookie("token");
+    res.status(200).json({ massage: "logged out successfully" });
   } catch (error: any) {
     res.status(500).json({ massage: error.message });
     console.log(`error : ${error}`);
@@ -138,3 +147,47 @@ export const updateUser = async (req: Request, res: Response) => {
     console.log(`error : ${error}`);
   }
 };
+
+export const Me = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    const user = await db.query("SELECT id_user, name, email, avatar, role FROM users WHERE id_user = $1", [userId]);
+    if (user.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ user: user.rows[0] });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+    console.log(`error : ${error}`);
+  }
+}
+
+export const AllUsers = async(req: Request, res: Response)=>{
+  try {
+    const {page, limit,search} = req.query
+    const pageNumber = parseInt(page as string) || 1;
+    const limitNumber = parseInt(limit as string) || 10;
+    const offset = (pageNumber - 1) * limitNumber;
+    let users;
+    let cont ;
+
+    if(search){
+      users = await db.query("SELECT id_user, name, email, avatar, role, created_at_user, updated_at_user FROM users WHERE name ILIKE $1 OR email ILIKE $1 LIMIT $2 OFFSET $3", [`%${search}%`, limitNumber, offset]);
+      cont = await db.query(`SELECT COUNT(*) FROM users WHERE name ILIKE $1 OR email ILIKE $1`, [`%${search}%`]);
+    }else{
+      users = await db.query("SELECT id_user, name, email, avatar, role ,created_at_user ,updated_at_user FROM users LIMIT $1 OFFSET $2", [limitNumber, offset]);
+      cont = await db.query(`SELECT COUNT(*) FROM users`);
+    }
+    res.status(200).json({
+      total: cont.rows[0].count,
+      page: pageNumber,
+      limit: limitNumber,
+      users: users.rows
+    });
+
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+    console.log(`error : ${error}`);
+    
+  }
+}

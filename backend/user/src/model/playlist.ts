@@ -7,14 +7,15 @@ const playlist = async () => {
         CREATE TABLE IF NOT EXISTS playlist (
             id_playlist SERIAL PRIMARY KEY,
             name VARCHAR(255) NOT NULL ,
-            user_id INTEGER REFERENCES users(id_user),
+            user_id INTEGER REFERENCES users(id_user) ON DELETE CASCADE,
             created_at_playlist TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at_playlist TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         CREATE TABLE IF NOT EXISTS Playlist_item (
             id_playlist_item SERIAL PRIMARY KEY,
-            id_playlist INTEGER REFERENCES playlist(id_playlist),
-            id_song INTEGER REFERENCES songs(id_song),
+            id_playlist INTEGER REFERENCES playlist(id_playlist) ON DELETE CASCADE,
+            id_song INTEGER REFERENCES songs(id_song) ON DELETE CASCADE,
+            background_image VARCHAR(255) DEFAULT NULL,
             created_at_playlist_item TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at_playlist_item TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );

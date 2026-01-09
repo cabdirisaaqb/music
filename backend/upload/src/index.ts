@@ -6,8 +6,8 @@ import path from "path";
 
 
 const app:Express = express()
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
+app.use(express.json({limit:"300mb"}))
+app.use(express.urlencoded({extended:true,limit:"300mb"}))
 app.use("/",FileRouter)
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 

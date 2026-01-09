@@ -6,10 +6,11 @@ const album = async () => {
         CREATE TABLE IF NOT EXISTS album(
             id_album SERIAL PRIMARY KEY,
             name_album VARCHAR(255) NOT NULL,
-            artist_album VARCHAR(255) NOT NULL,
-            genre_album VARCHAR(255) NOT NULL,
+            description_album VARCHAR(255) NOT NULL,
+            genre_album_id INTEGER REFERENCES genre(id_genre) ON DELETE SET NULL,
             search_album TEXT[] NOT NULL,
             image_url_album TEXT NOT NULL,
+            background TEXT NOT NULL,
             created_at_album TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at_album TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
