@@ -1,0 +1,43 @@
+
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import LoginForm from "../_components/LoginForm";
+import Link from "next/link";
+
+
+
+function Login() {
+
+  return (
+    <div>
+      <Card className="w-[450px]   sm:w-[490px] md:w-[700px]  md:py-10">
+        <CardHeader>
+          <CardTitle className="font-bold text-2xl ">Login</CardTitle>
+          <CardDescription  >
+            <p className=" text-ring">Please enter your details to create</p>
+            <p className=" text-ring "> your account</p>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+         <LoginForm/>
+        </CardContent>
+         <CardFooter>
+          <p className="flex w-full items-center justify-center ">
+             a have an account?{"  "}
+            <Link href={"/register"} className="text-primary hover:underline">
+              Register
+            </Link>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}
+
+export default Login;
