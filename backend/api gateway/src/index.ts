@@ -3,6 +3,8 @@ import Env from "./config/env.js";
 import proxy from "express-http-proxy";
 import { rateLimit} from "express-rate-limit";
 import morgan from "morgan";
+import cors from "cors";
+
 const app: Express = express();
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -13,6 +15,13 @@ const limiter = rateLimit({
   standardHeaders: true,
   
 });
+app.use(cors({
+  origin: Env.FRONTEND,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+
+}));
 app.use(morgan("dev"));
 app.set("trust proxy", 1);
 app.use(limiter);

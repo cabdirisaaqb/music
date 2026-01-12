@@ -1,8 +1,8 @@
+import AppQueryClient from "@/components/QueryClient";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider"
-const outfit = Outfit({subsets:['latin'],variable:'--font-sans'});
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,20 +25,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-   <html  suppressHydrationWarning
-     lang="en" className={outfit.variable}>
+   
+
+    <html suppressHydrationWarning lang="en" className={outfit.variable}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+        >
+           <AppQueryClient>
+
+       {children}
+           </AppQueryClient>
       </body>
     </html>
+       
   );
 }

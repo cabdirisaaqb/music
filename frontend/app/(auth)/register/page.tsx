@@ -6,9 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import RegisterForm from "../_components/RegisterForm";
-import { Car } from "lucide-react";
 import Link from "next/link";
+import RegisterForm from "../_components/RegisterForm";
 
 function Register() {
   return (
