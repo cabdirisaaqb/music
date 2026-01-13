@@ -10,9 +10,10 @@ export const RegisterUserHook = () => {
     return useMutation({
         mutationFn: (data: RegisterProps) => {
             return Register(data);
+
            
         },
-        onSuccess: (data) => {
+        onSuccess: (data):void => {
             
             toast.success(data.message);
             console.log(data.message);
@@ -20,7 +21,7 @@ export const RegisterUserHook = () => {
             
           
         },
-        onError: (error:any) => {
+        onError: (error:Error):void => {
             toast.error(error.response.data.massage
 );
               console.log(error);
@@ -43,7 +44,7 @@ export const LoginUserHook = () => {
             
           
         },
-        onError: (error:any) => {
+        onError: (error:Error) => {
             toast.error(error.response.data.massage);
              
           

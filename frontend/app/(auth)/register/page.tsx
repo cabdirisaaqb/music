@@ -11,8 +11,11 @@ import RegisterForm from "../_components/RegisterForm";
 
 function Register() {
   return (
-    <div>
-      <Card className="w-[450px] sm:w-[490px] md:w-[700px] md:py-10">
+    <div >
+
+
+
+      <Card className="w-[350px]  md:w-[640px]   ">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Register</CardTitle>
           <CardDescription>
@@ -33,6 +36,7 @@ function Register() {
           </p>
         </CardFooter>
       </Card>
+
     </div>
   );
 }

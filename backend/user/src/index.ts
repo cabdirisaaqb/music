@@ -45,6 +45,6 @@ db.connect().then(async() => {
 app.use("/",UserRouter)
 
 
-app.listen(Env.PORT, () => {
+app.listen(Env.PORT, ():void => {
   console.log(`Server is running http://localhost:${Env.PORT} `);
 });

@@ -4,9 +4,9 @@ import upload from "../config/multer.js";
 
 import {authenticateToken,authorizeRole}  from "../config/middleware.js";
 const albumRouter = Router();
-albumRouter.post("/albumCreate",  upload.single("img"), createAlbum);
-albumRouter.put("/albumUpdate/:id", upload.single("img"), UpdateAlbum);
-albumRouter.delete("/albumDelete/:id", DeleteAlbum);
+albumRouter.post("/albumCreate", authenticateToken, authorizeRole,upload.single("img"), createAlbum);
+albumRouter.put("/albumUpdate/:id",  authenticateToken, authorizeRole,upload.single("img"), UpdateAlbum);
+albumRouter.delete("/albumDelete/:id", authenticateToken, authorizeRole,DeleteAlbum);
 
 
 export default albumRouter;

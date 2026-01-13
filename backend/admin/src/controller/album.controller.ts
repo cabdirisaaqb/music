@@ -3,15 +3,6 @@ import db from "../config/db.js";
 import axios from "axios";
 import Env from "../config/env.js";
 import formdata from "form-data";
-//  id_album SERIAL PRIMARY KEY,
-//             name_album VARCHAR(255) NOT NULL,
-//             description_album VARCHAR(255) NOT NULL,
-//             genre_album_id INTEGER REFERENCES genre(id_genre) ON DELETE SET NULL,
-//             search_album TEXT[] NOT NULL,
-//             image_url_album TEXT NOT NULL,
-//             background TEXT NOT NULL,
-//             created_at_album TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//             updated_at_album TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 export const createAlbum = async (req: Request, res: Response) => {
   try {
@@ -22,8 +13,8 @@ export const createAlbum = async (req: Request, res: Response) => {
     }
     const queryCheck = `SELECT * FROM genre WHERE id_genre=$1`;
     const valuesCheck = [genre];
-    const resultCheck = db.query(queryCheck, valuesCheck);  
-    if ((await resultCheck).rows.length === 0) {                               
+    const resultCheck = db.query(queryCheck, valuesCheck);
+    if ((await resultCheck).rows.length === 0) {
       return res.status(404).json({ message: "Genre not found" });
     }
     const image = req.file as Express.Multer.File;
@@ -48,7 +39,14 @@ export const createAlbum = async (req: Request, res: Response) => {
       image_url = data.album;
     }
     const query = `INSERT INTO album(name_album,description_album, genre_album_id,search_album,image_url_album,background) VALUES($1,$2,$3,$4,$5,$6) RETURNING *`;
-    const values = [name, description, genre, JSON.parse(search), image_url,background];
+    const values = [
+      name,
+      description,
+      genre,
+      JSON.parse(search),
+      image_url,
+      background,
+    ];
     const result = await db.query(query, values);
     if (result.rows.length === 0) {
       return res.status(500).json({ message: "Album not created" });
@@ -75,7 +73,6 @@ export const UpdateAlbum = async (req: Request, res: Response) => {
       if ((await resultCheckGenre).rows.length === 0) {
         return res.status(404).json({ message: "Genre not found" });
       }
-      
     }
 
     const queryCheck = `SELECT * FROM album WHERE id_album=$1`;
@@ -107,9 +104,11 @@ export const UpdateAlbum = async (req: Request, res: Response) => {
       name: name || (await resultCheck).rows[0].name_album,
       description: description || (await resultCheck).rows[0].description_album,
       genre: genre || (await resultCheck).rows[0].genre_album_id,
-      search: search ? JSON.parse(search) : (await resultCheck).rows[0].search_album,
+      search: search
+        ? JSON.parse(search)
+        : (await resultCheck).rows[0].search_album,
       image_url: image_url || (await resultCheck).rows[0].image_url_album,
-        background: background || (await resultCheck).rows[0].background,
+      background: background || (await resultCheck).rows[0].background,
     };
 
     const queryUpdate = `UPDATE album SET name_album=$1,description_album=$2, genre_album_id=$3,search_album=$4,image_url_album=$5,background=$6 WHERE id_album=$7 RETURNING *`;
@@ -120,27 +119,23 @@ export const UpdateAlbum = async (req: Request, res: Response) => {
       update.search,
       update.image_url,
       update.background,
-      id
+      id,
     ];
     const resultUpdate = await db.query(queryUpdate, valuesUpdate);
     if (resultUpdate.rows.length === 0) {
       return res.status(500).json({ message: "Album not updated" });
     }
-    res
-      .status(200)
-      .json({
-        message: "Album updated successfully",
-        album: resultUpdate.rows[0],
-      });
+    res.status(200).json({
+      message: "Album updated successfully",
+      album: resultUpdate.rows[0],
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
     console.log(`error:${error}`);
   }
 };
 
-
-export const DeleteAlbum = async(req: Request, res: Response) => {
-
+export const DeleteAlbum = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     if (!id) {
@@ -159,15 +154,9 @@ export const DeleteAlbum = async(req: Request, res: Response) => {
     if (resultDelete.rows.length === 0) {
       return res.status(500).json({ message: "Album not deleted" });
     }
-    res
-      .status(200)
-      .json({ message: "Album deleted successfully" });
+    res.status(200).json({ message: "Album deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
     console.log(`error:${error}`);
   }
 };
-
-export const GetAllAlbums = async (req: Request, res: Response) => {
-  
-}

@@ -12,7 +12,7 @@ import Link from "next/link";
 function Login() {
   return (
     <div>
-      <Card className="w-[450px] rounded-lg sm:w-[490px] md:w-[700px] md:py-10">
+      <Card className="w-[350px]  md:w-[640px]   ">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
           <CardDescription>
@@ -25,7 +25,7 @@ function Login() {
         </CardContent>
         <CardFooter>
           <p className="flex w-full items-center justify-center">
-            a have an account?{"  "}
+            Ahave an account?{"  "}
             <Link href={"/register"} className="text-primary hover:underline">
               Register
             </Link>
