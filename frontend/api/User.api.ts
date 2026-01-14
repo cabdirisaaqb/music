@@ -17,7 +17,7 @@ export const Logout = async () => {
 };
 
 export const Me = async () => {
-  const { data } = await Axios.get("/user/me");
+  const { data } = await Axios.get("/fetch/me");
   return data;
 };
 
@@ -31,11 +31,11 @@ export const AllUsers = async (props:AllUsersProps) => {
     const {limit,page,search} = props;
    
     if(search){
-        const { data } = await Axios.get("/user/all",{params:{limit,page,search}});
+        const { data } = await Axios.get("/fetch/all",{params:{limit,page,search}});
         return  data
 
     }else{
-         const { data } = await Axios.get("/user/all",{params:{limit,page}});
+         const { data } = await Axios.get("/fetch/all",{params:{limit,page}});
           return  data
 
     }

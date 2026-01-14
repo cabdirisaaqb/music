@@ -18,19 +18,42 @@ import EditGener from "../_components/genre/Edit.Gener";
 import AddGenre from "../_components/genre/add";
 import { useEffect, useState } from "react";
 import Paginations from "../_components/genre/Paginations";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 function Genre() {
- const [limit, setLimit] = useState<number>(10);
-  const [page, setPage] = useState<number>(1);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "10");
+  const searchQuery = searchParams.get("search") || "";
+ 
+ const handlePageChange = (newPage: number) => {
+  const params = new URLSearchParams(searchParams.toString());
+  params.set("limit", limit.toString());
+  params.set("page", newPage.toString(),);
+  params.delete("search");
+ router.push(`${pathname}?${params.toString()}`);
+ }
 
- const [search, setSearch]= useState("")
+
+ const [search, setSearch]= useState(searchQuery)
 const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  // 3. useEffect si loo maareeyo waqtiga
+ 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedSearch(search);
-      setPage(1);
-    }, 500); 
+      const params = new URLSearchParams(searchParams.toString());
+    if (search) {
+        params.set("search", search);
+        params.set("page", "1"); 
+        params.set("limit", limit.toString());
+        setDebouncedSearch(searchQuery);
+      } else {
+        params.delete("search");
+        setDebouncedSearch("");
+      }
+     router.push(`${pathname}?${params.toString()}`);
+    }, 500 ); 
 
     return () => {
       clearTimeout(handler); 
@@ -57,7 +80,7 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
 
       <div className="mx-auto mt-10 flex w-[80%] items-center justify-between space-x-1 overflow-hidden">
         <div className="">
-          <Input placeholder="Search" className="md:w-[400px] lg:w-[600px]"  value={search} onChange={(e)=> setSearch(e.target.value)}/>
+          <Input placeholder="Search"  type="search" className="md:w-[400px] lg:w-[600px]"  value={search} onChange={(e)=> setSearch(e.target.value)}/>
         </div>
         {/* add genre */}
         <AddGenre />
@@ -95,12 +118,12 @@ const [debouncedSearch, setDebouncedSearch] = useState("");
         </Table>
       </div>
      
-     <Paginations 
-          currentPage={page} 
-          totalItems={totalGenres} 
-          limit={limit} 
-          onPageChange={(newPage) => setPage(newPage)} 
-        />
+   <Paginations 
+        currentPage={page} 
+        totalItems={totalGenres} 
+        limit={limit} 
+        onPageChange={handlePageChange} 
+      />
      
      
       

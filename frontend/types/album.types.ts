@@ -19,7 +19,7 @@ export interface albumCreateProps {
   img: File; 
 }
 
-export interface albumUftiinpdateProps {
+export interface albumUPdateProps {
   name?: string;
   description?: string;
   genre?: number;
