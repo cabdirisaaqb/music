@@ -16,19 +16,22 @@ export interface  UpdateUserProfileProps{
     email?: string;
     avatar?: string;
 }
-export interface UserProps{
-    id_user: number;
-    name: string;
-    email: string;
-    avatar: string;
-    role: string;
-    created_at_user?: string;
-    updated_at_user?: string;
-}
+
 export interface AllUsersProps{
    
-    page:number,
-    limit:number,
-    search:number
+    page?:number,
+    limit?:number,
+    search?:number
     
+}
+
+export interface UserProps {
+     id_user:number;
+     name:string;
+     email:string;
+     password:string;
+     avatar:string;
+     role:string;
+     created_at_user?:string;
+     updated_at_user?:string;          
 }

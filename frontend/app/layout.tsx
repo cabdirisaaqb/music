@@ -30,6 +30,7 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en" className={outfit.variable}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning={true}
         >
            <AppQueryClient>
 

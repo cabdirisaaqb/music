@@ -3,7 +3,7 @@ import db from "../config/db.js";
 
 export const getAllAlbum = async (req: Request, res: Response) => {
   try {
-    const { page, limit, search } = req.query;
+    const { page, limit, search,genre } = req.query;
     const pageInt = parseInt(page as string) || 1;
     const limitInt = parseInt(limit as string) || 10;
     const offset = (pageInt - 1) * limitInt;
@@ -28,7 +28,24 @@ export const getAllAlbum = async (req: Request, res: Response) => {
       );
 
       result = await db.query(searchQuery, [`%${search}%`, limitInt, offset]);
-    } else {
+    }else if(genre){
+      const genreQuery = `
+       SELECT * FROM album
+       WHERE genre_album_id = $1
+       ORDER BY id_album ASC
+       LIMIT $2 OFFSET $3
+      `;
+
+      countResult = await db.query(
+        `
+      SELECT COUNT(*) FROM album
+      WHERE genre_album_id = $1 
+      `,
+        [ Number(genre)]
+      );
+
+      result = await db.query(genreQuery, [ Number(genre), limitInt, offset]);
+    }else {
       const query = `
           SELECT * FROM album ORDER BY id_album ASC LIMIT
            $1 OFFSET $2

@@ -5,19 +5,50 @@ export const GetAllGenres = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
+    const search = req.query.search as string | undefined;
     const offset = (page - 1) * limit;
-    const countResult = await db.query(`SELECT COUNT(*) FROM genre`);
-    const totalItems = parseInt(countResult.rows[0].count);
-    const totalPages = Math.ceil(totalItems / limit);
-    const query = `SELECT * FROM genre ORDER BY id_genre ASC LIMIT $1 OFFSET $2`;
-    const values = [limit, offset];
-    const result = await db.query(query, values);
+    let countResult;
+    let result;
+
+   
+     if (search) {
+      const searchQuery = `
+      SELECT * FROM genre
+      WHERE name_genre ILIKE $1
+      ORDER BY id_genre ASC
+      LIMIT $2 OFFSET $3
+      `;
+      countResult = await db.query(
+        `
+        SELECT COUNT(*) FROM genre
+        WHERE name_genre ILIKE $1
+        `,
+        [`%${search}%`]
+      );
+      result = await db.query(searchQuery, [`%${search}%`, limit, offset]);
+
+
+     }else{
+      const query = `
+      SELECT * FROM genre
+      ORDER BY id_genre ASC
+      LIMIT $1 OFFSET $2
+      `;
+      countResult = await db.query(`
+      SELECT COUNT(*) FROM genre
+      `);
+      result = await db.query(query, [limit, offset]);
+
+     }
+      
+
+   console.log( "genres:" ,result?.rows,);
+   
     res.status(200).json({
       page,
       limit,
-      totalItems,
-      totalPages,
-      genres: result.rows,
+      total_genres: countResult.rows[0].count,
+      genres: result?.rows,
     });
   } catch (error: any) {
     res.status(500).json({ message: error.message });

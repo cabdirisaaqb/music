@@ -1,9 +1,6 @@
 import {Request,Response} from "express"
 import db from "../config/db.js";
 
-
-
-
 export const playlistGet =  async(req:Request,res:Response)=>{
     try {
         const {search,page,limit} = req.query

@@ -33,7 +33,7 @@ import { usePathname } from "next/navigation"
   },
   {
     title: "Genre",
-    url: "#",
+    url: "/admin/genre",
     icon: Stone ,
   }
   
@@ -73,10 +73,10 @@ export function AdminSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathName == item.url}>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

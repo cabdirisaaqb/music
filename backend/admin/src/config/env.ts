@@ -9,6 +9,9 @@ const Env = {
     POSTGRES_PORT:process.env.POSTGRES_PORT,
     POSTGRES_DB:process.env.POSTGRES_DB,
     JWT_SECRET:process.env.JWT_SECRET,
-    SERVER_UPLOAD_PATH:process.env.SERVER_UPLOAD
+    SERVER_UPLOAD_PATH:process.env.SERVER_UPLOAD,
+    FRONTEND:process.env.FRONTEND,
+    
+
 }
 export default Env

@@ -21,7 +21,7 @@ export const RegisterUserHook = () => {
             
           
         },
-        onError: (error:Error):void => {
+        onError: (error:any):void => {
             toast.error(error.response.data.massage
 );
               console.log(error);
@@ -44,7 +44,7 @@ export const LoginUserHook = () => {
             
           
         },
-        onError: (error:Error) => {
+        onError: (error:any) => {
             toast.error(error.response.data.massage);
              
           

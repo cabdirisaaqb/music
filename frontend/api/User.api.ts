@@ -2,17 +2,17 @@ import { Axios } from "@/lib/axios";
 import { AllUsersProps, LoginProps, RegisterProps, UpdateUserProfileProps } from "@/types/User.types";
 
 export const Register = async (props: RegisterProps) => {
-  const { data } = await Axios.post("/api/v1/user/register", props);
+  const { data } = await Axios.post("/user/register", props);
   return data;
 };
 
 export const Login = async (props: LoginProps) => {
-  const { data } = await Axios.post("/api/v1/user/login", props);
+  const { data } = await Axios.post("/user/login", props);
   return data;
 };
 
 export const Logout = async () => {
-  const { data } = await Axios.get("api/v1/user/logout");
+  const { data } = await Axios.get("/user/logout");
   return data;
 };
 

@@ -14,3 +14,5 @@ songRouter.put("/songUpdate/:id",  authenticateToken, authorizeRole,upload.field
 ]), UpdateSong);
 
 songRouter.delete("/songDelete/:id", authenticateToken, authorizeRole,DeleteSong);
+
+export default songRouter;
