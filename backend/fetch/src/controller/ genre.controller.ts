@@ -55,3 +55,24 @@ export const GetAllGenres = async (req: Request, res: Response) => {
     console.log(`error${error}`);
   }
 };
+
+export const GenreId = async (req: Request, res: Response) => {
+  try {
+    const genre =  await db.query(`SELECT * FROM genre`)
+    if((await genre).rows.length === 0){
+      return res.status(404).json({message:"genre not found"})
+    }
+    
+    res.status(200).json({
+      genre:genre.rows
+    });
+
+    
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+    console.log(`error${error}`);
+
+    
+  }
+}
+

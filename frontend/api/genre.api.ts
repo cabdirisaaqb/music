@@ -27,3 +27,8 @@ export const  GetAllGenres = async(props:allGenreProps)=>{
     }
 }
 
+export const  GenreId = async()=>{
+    const {data} = await Axios.get(`/fetch/GenreId`)
+    return data
+}
+

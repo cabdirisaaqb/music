@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import e, { Response, Request } from "express";
 import db from "../config/db.js";
 
 export const getAllAlbum = async (req: Request, res: Response) => {
@@ -14,7 +14,9 @@ export const getAllAlbum = async (req: Request, res: Response) => {
     if (search) {
       const searchQuery = `
        SELECT * FROM album
+       JOIN genre ON  genre.id_genre = genre_album_id
        WHERE array_to_string(search_album,' ') ILIKE $1
+     
        ORDER BY id_album ASC
        LIMIT $2 OFFSET $3
       `;
@@ -22,6 +24,7 @@ export const getAllAlbum = async (req: Request, res: Response) => {
       countResult = await db.query(
         `
       SELECT COUNT(*) FROM album
+       JOIN genre ON  genre.id_genre = genre_album_id
       WHERE array_to_string(search_album,' ') ILIKE $1 
       `,
         [`%${search}%`]
@@ -31,6 +34,7 @@ export const getAllAlbum = async (req: Request, res: Response) => {
     }else if(genre){
       const genreQuery = `
        SELECT * FROM album
+      JOIN genre ON  genre.id_genre = genre_album_id
        WHERE genre_album_id = $1
        ORDER BY id_album ASC
        LIMIT $2 OFFSET $3
@@ -47,7 +51,9 @@ export const getAllAlbum = async (req: Request, res: Response) => {
       result = await db.query(genreQuery, [ Number(genre), limitInt, offset]);
     }else {
       const query = `
-          SELECT * FROM album ORDER BY id_album ASC LIMIT
+          SELECT * FROM album 
+          JOIN genre ON  genre.id_genre = genre_album_id
+          ORDER BY id_album ASC LIMIT
            $1 OFFSET $2
            `;
       countResult = await db.query(`SELECT COUNT(*) FROM album`);
@@ -72,3 +78,17 @@ export const getAllAlbum = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getAlbumById = async (req: Request, res: Response) => {
+  try {
+   
+    const album = await db.query("SELECT id_album, name_album FROM album ")
+    res.status(200).json({
+      album:album
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+    console.log(`error: ${error}`);
+  }
+      
+}

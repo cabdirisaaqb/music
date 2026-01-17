@@ -3,6 +3,7 @@ import {
   UPdateGenre as UpdateGenre,
   DeleteGenre,
   GetAllGenres,
+  GenreId,
 } from "@/api/genre.api";
 import {
   genreCreateProps,
@@ -66,5 +67,12 @@ export const useGetAllGenresHook = (params: allGenreProps) => {
   return useQuery({
     queryKey: ["allGenres", params],
     queryFn: () => GetAllGenres(params)
+  });
+};
+
+export const useGenreIdHook = () => {
+  return useQuery({
+    queryKey: ["GenreId"],
+    queryFn: () => GenreId(),
   });
 };

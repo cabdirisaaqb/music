@@ -1,5 +1,4 @@
 
-import React from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,11 +10,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Trash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useDeleteGenreHook } from '@/hooks/genre.hook'
-function DeleteGenre({id, name}: {id: number, name: string}) {
-    const {mutate} = useDeleteGenreHook()
+import { AlbumDeleteHook } from '@/hooks/album.hook'
+import { Trash } from 'lucide-react'
+function DeleteAlbum({id, name}: {id: number, name: string}) {
+    const {mutate} = AlbumDeleteHook()
     const handleDelete = () => {
         if(!id) return
         console.log(id);
@@ -54,4 +53,4 @@ function DeleteGenre({id, name}: {id: number, name: string}) {
   )
 }
 
-export default DeleteGenre
+export default DeleteAlbum

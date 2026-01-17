@@ -8,6 +8,10 @@ export interface AlbumProps {
   background: string;
   created_at_album: string;
   updated_at_album: string;
+  name_genre: string;
+  id_genre:number
+
+
 }
 
 export interface albumCreateProps {

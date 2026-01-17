@@ -17,15 +17,15 @@ export const createAlbum = async (req: Request, res: Response) => {
     if ((await resultCheck).rows.length === 0) {
       return res.status(404).json({ message: "Genre not found" });
     }
-    const image = req.file as Express.Multer.File;
-    if (!image) {
+    const img = req.file as Express.Multer.File  ;
+    if (!img) {
       return res.status(400).json({ message: "Image is required" });
     }
-    if (image) {
+    if (img) {
       const form = new formdata();
-      form.append("img", image.buffer, {
-        filename: image.originalname,
-        contentType: image.mimetype,
+      form.append("img", img.buffer, {
+        filename: img.originalname,
+        contentType: img.mimetype,
       });
       const { data } = await axios.post(
         `${Env.SERVER_UPLOAD_PATH}/upload/album`,
@@ -65,7 +65,7 @@ export const UpdateAlbum = async (req: Request, res: Response) => {
     const { id } = req.params;
     let image_url: string | undefined;
     const { name, description, genre, search, background } = req.body;
-    const image = req.file as Express.Multer.File;
+    const img = req.file as Express.Multer.File;
     if (genre) {
       const queryCheckGenre = `SELECT * FROM genre WHERE id_genre=$1`;
       const valuesCheckGenre = [genre];
@@ -82,11 +82,11 @@ export const UpdateAlbum = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Album not found" });
     }
 
-    if (image) {
+    if (img) {
       const form = new formdata();
-      form.append("img", image.buffer, {
-        filename: image.originalname,
-        contentType: image.mimetype,
+      form.append("img", img.buffer, {
+        filename: img.originalname,
+        contentType: img.mimetype,
       });
       const { data } = await axios.post(
         `${Env.SERVER_UPLOAD_PATH}/upload/album`,
